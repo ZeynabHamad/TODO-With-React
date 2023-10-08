@@ -3,12 +3,14 @@ import Filter from "./components/Filter";
 import Header from "./components/UI/Header/Header";
 import FormList from "./components/FormList";
 import { useEffect, useState } from "react";
+import Search from "./components/UI/Header/Search";
 
 function App() {
   const [data, setData] = useState([]);
   const [state, setState] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getToLocalStore();
@@ -17,7 +19,7 @@ function App() {
   useEffect(() => {
     saveToLocalStore();
     filterHandler();
-  }, [data, state, dateFilter]);
+  }, [data, state, dateFilter, search]);
 
   const onData = (dataa) => {
     setData((prev) => [
@@ -91,12 +93,19 @@ function App() {
       default:
         break;
     }
+    if (search.trim() !== "") {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
     setFilteredData(filtered);
   };
+  console.log(search);
 
   return (
     <div>
+      <Search setSearch={setSearch} />
       <Header />
       <div className="form">
         <FormInput onGetdata={onData} />
