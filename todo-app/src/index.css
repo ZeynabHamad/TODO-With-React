@@ -115,7 +115,7 @@ header {
 
 .filter {
 
-  max-width: 15rem;
+  max-width: 13rem;
   background-color: var(--button--color);
   padding: 1.1rem;
   margin: 1rem;
@@ -124,6 +124,17 @@ header {
   color: #86888e;
   outline: none;
 
+}
+
+.filterDate {
+  max-width: 10rem;
+  background-color: var(--button--color);
+  padding: 1.1rem;
+  margin: 1rem;
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  color: #86888e;
+  outline: none;
 }
 
 
@@ -153,6 +164,7 @@ header {
 
 
 .todo {
+
   height: 3.5rem;
   display: flex;
   text-align: start;
@@ -164,6 +176,13 @@ header {
   border: 0.5px solid rgb(135, 130, 130);
   border-radius: 2rem;
 
+}
+
+.editTodo {
+  height: 3rem;
+  width: 100%;
+  background-color: #d1d2d4;
+  border: none;
 }
 
 .todo-item {
@@ -180,6 +199,17 @@ header {
   transition: all 0.5s ease;
 }
 
+.edit {
+  background-color: #989394;
+  height: 100%;
+  font-size: 1.2rem;
+  transition: all 0.5s ease;
+}
+
+.edit:hover {
+  background-color: #b1b1b1;
+}
+
 .clear {
   width: 90%;
   height: 2.5rem;
@@ -190,7 +220,7 @@ header {
 }
 
 .delete:hover {
-  background-color: #5e1925;
+  background-color: #9f3446;
 }
 
 
@@ -199,9 +229,18 @@ header {
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
   font-size: 1.2rem;
-  transition: all 0.5s ease;
+  transition: all 0.5s;
   height: 100%;
 
+}
+
+.save {
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  background-color: #989394;
+  height: 100%;
+  font-size: 1.2rem;
+  transition: all 0.5s ease;
 }
 
 .checked:hover {

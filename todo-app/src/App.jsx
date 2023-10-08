@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 function App() {
   const [data, setData] = useState([]);
   const [state, setState] = useState("all");
-  const [returnByFilter, setReturnByFilter] = useState([]);
+  const [dateFilter, setDateFilter] = useState("all");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     getToLocalStore();
@@ -16,12 +17,12 @@ function App() {
   useEffect(() => {
     saveToLocalStore();
     filterHandler();
-  }, [data, state]);
+  }, [data, state, dateFilter]);
 
   const onData = (dataa) => {
     setData((prev) => [
       ...prev,
-      { name: dataa, id: Math.random(), compleate: false },
+      { name: dataa, id: Math.random(), compleate: false, date: new Date() },
     ]);
   };
 
@@ -32,27 +33,66 @@ function App() {
   };
 
   const getToLocalStore = () => {
-    if (localStorage.getItem("todos") === null) {
-      localStorage.setItem("todos", JSON.stringify([]));
-    } else {
-      let toLocalStorage = JSON.parse(localStorage.getItem("todos"));
-      setData(toLocalStorage);
-      console.log(toLocalStorage);
-    }
+    let toLocalStorage = JSON.parse(localStorage.getItem("todos"));
+    setData(toLocalStorage);
   };
 
   const filterHandler = () => {
+    let filtered = [...data];
+
     switch (state) {
       case "compleated":
-        setReturnByFilter(data.filter((item) => item.compleate == true));
+        filtered = filtered.filter((item) => item.compleate === true);
         break;
 
       case "uncompleated":
-        setReturnByFilter(data.filter((item) => item.compleate == false));
+        filtered = filtered.filter((item) => item.compleate === false);
         break;
       default:
-        setReturnByFilter(data);
+        break;
     }
+
+    switch (dateFilter) {
+      case "today":
+        filtered = filtered.filter((item) => {
+          const itemDate = new Date(item.date);
+          const today = new Date();
+          return (
+            itemDate.getDate() === today.getDate() &&
+            itemDate.getMonth() === today.getMonth() &&
+            itemDate.getFullYear() === today.getFullYear()
+          );
+        });
+        break;
+
+      case "yesterday":
+        filtered = filtered.filter((item) => {
+          const itemDate = new Date(item.date);
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          return (
+            itemDate.getDate() === yesterday.getDate() &&
+            itemDate.getMonth() === yesterday.getMonth() &&
+            itemDate.getFullYear() === yesterday.getFullYear()
+          );
+        });
+        break;
+
+      case "this-week":
+        filtered = filtered.filter((item) => {
+          const itemDate = new Date(item.date);
+          const today = new Date();
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(today.getDate() - 7);
+          return itemDate >= oneWeekAgo && itemDate <= today;
+        });
+        break;
+
+      default:
+        break;
+    }
+
+    setFilteredData(filtered);
   };
 
   return (
@@ -60,11 +100,15 @@ function App() {
       <Header />
       <div className="form">
         <FormInput onGetdata={onData} />
-        <Filter setState={setState} />
+        <Filter setState={setState} setDate={setDateFilter} />
       </div>
 
-      {data.length && data.length > 0 && (
-        <FormList data={data} setData={setData} filterTodo={returnByFilter} />
+      {filteredData.length > 0 && (
+        <FormList
+          data={filteredData}
+          setData={setData}
+          filterTodo={filteredData}
+        />
       )}
     </div>
   );

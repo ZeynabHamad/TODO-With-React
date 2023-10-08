@@ -3,6 +3,7 @@ import Card from "./UI/Card";
 const FormList = ({ data, setData, filterTodo }) => {
   const clearHandler = () => {
     setData([]);
+    localStorage.clear("todos");
   };
 
   return (
